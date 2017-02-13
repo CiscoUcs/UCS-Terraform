@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/CiscoCloud/terraform-provider-ucs/ucsclient"
+	"github.com/micdoher/terraform-provider-ucs/ucsclient"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 )
