@@ -1,0 +1,8 @@
+<configResolveClass cookie="1433304596/744b8780-9b00-4b8d-be81-234dc3cecbd1" response="yes" classId="macpoolAddr">
+  <outConfigs>
+    <macpoolAddr assigned="yes" assignedToDn="org-root/ls-deathstar/ether-eth1" dn="mac/00:25:B5:00:00:8F" globalAssignedCnt="0" globalDefinedCnt="0" id="00:25:B5:00:00:8F" owner="pool"/>
+    <macpoolAddr assigned="yes" assignedToDn="org-root/ls-deathstar/ether-eth0" dn="mac/00:25:B5:00:00:9F" globalAssignedCnt="0" globalDefinedCnt="0" id="00:25:B5:00:00:9F" owner="pool"/>
+    <macpoolAddr assigned="no" assignedToDn="" dn="mac/00:25:B5:00:00:A0" globalAssignedCnt="0" globalDefinedCnt="0" id="00:25:B5:00:00:A0" owner="pool"/>
+    <macpoolAddr assigned="no" assignedToDn="" dn="mac/20:00:00:00:20:22" globalAssignedCnt="0" globalDefinedCnt="0" id="20:00:00:00:20:22" owner="pool"/>
+  </outConfigs>
+</configResolveClass>
