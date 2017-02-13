@@ -5,8 +5,8 @@ import (
 	"net"
 	"sync"
 
-	"github.com/CiscoCloud/terraform-provider-ucs/ipman"
-	"github.com/CiscoCloud/terraform-provider-ucs/ucsclient"
+	"github.com/micdoher/terraform-provider-ucs/ipman"
+	"github.com/micdoher/terraform-provider-ucs/ucsclient"
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
