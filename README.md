@@ -1,151 +1,230 @@
-# Terraform UCS Provider
+Overview of solution
 
-## Overview of solution
+The major goal of this project is to be able to Create, Read, Update & Destroy different kind of resources in UCS, from Service Profiles to Boot Policies, Network Policies, Service Profile Templates, etc. For such purpose we have made a Terraform provider. Visit Terraform's official website for more information on what exactly terraform it and how it works.
 
-The major goal of this project is to be able to **C**reate, **R**ead, **U**pdate & **D**estroy
-different kind of resources in UCS, from Service Profiles to Boot Policies, Network Policies,
-Service Profile Templates, etc. For such purpose we have made a Terraform provider.
-Visit Terraform's [official website](https://terraform.io) for more information on what
-exactly is it and how it works.
+On a feature level, this will allow the user to:
 
-On a **feature level**, this will allow the user to:
+- Use Terraform to seamlessly deploy an arbitrary amount of Cisco machines into UCS at scale.
+- Specify predefined service profiles from Terraform.
 
-  * Use Terraform to seamlessly deploy an arbitrary amount of Cisco machines into UCS at scale.
-  * Specify predefined service profiles from Terraform.
+Given a configuration file whose purpose is to create a new Service Profile in UCS, the way it all  works is the terraform-provider-ucs talks to UCS, requesting to create a new Service Profile
 
-Given a configuration file whose purpose is to create a new Service Profile in UCS, the way it all clicks
-together looks more or less like this:
+This terraform provider will be enhance and iterated upon when we understand further requirement from the DevNet community. One of the first suggested additions is using Cobbler to add the Operating System into the new created UCS Server so please provider feedback if you feel this is interesting to you.
 
-  1. `terraform-provider-ucs` talks to UCS, requesting to create a new Service Profile.
-  2. Once the Service Profile has been created the provider then fetches its MAC address.
-  3. A `cobbler system` is then created (also via Terraform as there is a `terraform-provider-cobbler`),
-     passing along the Service Profile as its hostname, an IP address (read on to learn how the IP is generated)
-     and its MAC address.
+How the Provider setup process works
 
-As you can see in the steps aboved described the process is pretty straight forward. The only problem here is that
-as soon as the Service Profile is created the machine that gets associated immediately boots up so there could be
-a moment where the machine is up looking for some PXE server to provide an installation kernel and the machine can
-not find it. But as of today this really is not an issue as the machine must first load Cisco's propietary system
-first, which takes about 15 minutes in average. There have been discussions with the Hardware team at Cisco to see
-if this initial time can be reduced but nothing concise has come out of it.  When that time decreases to milliseconds
-then we will need to think of a better solution.
+- Make bootstrap pulls down the terraform binaries, config .tf,
+- The terraform binary file (which is $GOPATH/bin directory) looks to the terraform-provider-ucs file (which you will compile in the setup process documented below) in order to interact with the specified resources UCSM API. .
+- During this process the default make bootstrap task will download some of the dependencies including the actually terraform binaries, will test, clean any distribution file and build the required project files.
+- It is the make build process that actually build out the terraform-provider-ucs file and this file needs to be in the same folder as the terraform binary when executing the actual terraform commands.
 
-It is also important to point out that steps 2 and 3 are completely optional. The user is free to chose a different way
-to bootstrap their servers. We chose Cobbler because its relative ease of use and also because it allows integration
-with the `terraform-provider-cobbler`. The machine where Cobbler is running should have the same network access to UCS
-as the machine where the `terraform-provider-ucs`
 
-### How the IP is generated?
-It's a combination between the `inventory` file and the `CIDR` configuration field.
-If the UCS setup is pristine, that is, if there is no inventory file whatsoever then an IP will be generated from
-the given `CIDR`, the inventory file will be created and the IP will be appended to it.
-If there is an existing inventory file with at least an IP in it then that IP will be interpreted as the last IP
-known to the system and the new Service Profile that is being created will have the IP that follows the previous one.
 
-**Important note: The `inventory` file should not be manually modified as it may lead to odd behaviour of
-the provider.**
+How to compile and install
 
-## Roadmap
+There are dependencies on the following to environments being setup prior to running the terraform provider creation process:-
 
-### Features
+- Git
+- Go
 
-  - [x] Add cross-platform compilation task in Makefile.
-  - [ ] Add support for configuring multiple network interfaces.
-  - [ ] Automatically push dist files to Github.
-  - [ ] Improve error message logging. Currently errors are only dumped into the log file,
-        which makes things difficult to debug. Better if we could report them on the same
-        screen from which Terraform was ran on.
-  - [ ] Extract UCS client into its own library and repository.
-  - [ ] Remove unused fields from the different `struct` types that we have in the codebase.
-        Right now there are a bunch of fields being returned by UCS that we don't really need
-        but we still map in memory but perhaps we can just get rid of that to avoid dust
-        piling up in the code.
+If you are not familiar with the folder structure for Go projects, check out this document.
+For Git information https://github.com/
 
-### Dev Tools
-  - [x] Vagrant.
 
-### Bugs
+GIT
+Make sure GIT is setup and working locally as this will be used during the setup process to clone files in different points in this setup process.
 
-## System Dependencies
-  * [Terraform]
 
----
+
+Running the GO setup process
+
+You will need to download GO(lang) onto the machine from where you will run the terraform setup process.
+
+You can download it from here: -
+
+https://golang.org/dl/
+
+Use the default setting during the install process for GOlang
+
+Create the required directory structure
+
+- Make a directory ~/Users/yourlocalusernamehere/go
+- Make a directory ~/Users/yourlocalusernamehere/go/src/github.com/micdoher
+
+(note this is on a Mac so I am hoping that someone will contribute by trying this out for Windows and adding a section to reflect this)
+
+
+
+Setting up the Environment Variables
+
+For GO:-
+
+export PATH=$PATH:/usr/local/go/bin
+export GOPATH=/Users/yourlocalusernamehere/go
+
+For Terraform : -
+
+export PATH=$PATH:/Users/yourlocalusernamehere/go/bin
+
+For the compiling process
+
+export  PATH=$PATH:/Users/yourlocalusernamehere/go
+
+
+
+Clone the Git binaries
+
+Clone the terraform-provider-ucs into /Users/yourlocalusernamehere/go/src/github.com/micdoher/ via the following command: -
+
+git clone https://github.com/micdoher/terraform-provider-ucs.git
+
+Clone the “go-utils” into /Users/yourlocalusernamehere/go/src/github.com/micdoher with the following command: -
+
+git clone https://github.com/micdoher/GoUtils.git
+
+
+
+Compiling and dependency setup
+
+After the terraform provider has been cloned, the resulting directory structure should look like the following: -
+
+Now navigate to: -
+
+/Users/yourlocalusernamehere/go/src/github.com/CiscoCloud/terraform-provider-ucs
+
+
+and run: -
+
+make bootstrap
+
+
+An additional file should have been added called “config.tf” in the same folder-
+
+Now you need to run the following command from the same directory: -
+
+make build
+
+The output should return no errors.
+
+
+Make a copy over a copy of the “terraform-provider-ucs” file into the same directory where the terraform binary lives  (normally this is /Users/yourlocalusernamehere/go/bin)
+
+
+
+Running Terraform
+
+Make a copy of the “config.tf” file into the same directory where the terraform binary lives  (normally this is /Users/yourlocalusernamehere/go/bin) and customise this to reflect your UCSM environment.
+
+
+Customize the config.tf file to reflect your desired UCS state.
 
 Currently the supported arguments are:
 
-* UCS provider parameters:
+- UCS provider parameters:
 
-  * **ip_addres** the IP where the UCS manager service is running on.
-  * **username** username used for authentication.
-  * **password** password used for authentication.
-  * **log_level** default: 1.  
-    Valid values:  
-      * 0 (TRACE)
-      * 1 (DEBUG)
-      * 2 (INFO)
-      * 3 (WARN)
-      * 4 (ERROR)
-      * 5 (FATAL)
-  * **log_filename** default: stderr.
+    - ip_addres the IP where the UCS manager service is running on.
+    - username username used for authentication.
+    - password password used for authentication.
+    - log_level default: 1.
+    - Valid values:
+        - 0 (TRACE)
+        - 1 (DEBUG)
+        - 2 (INFO)
+        - 3 (WARN)
+        - 4 (ERROR)
+        - 5 (FATAL)
 
-    Example:
+    - log_filename default: stderr.
 
-    ```
-    provider "ucs" {
-      ip_address   = "1.2.3.4"
-      username     = "john"
-      password     = "supersecret"
-      log_level    = 6
-      log_filename = "terraform.log"
-    }
-    ```
+    - Example:
 
-* Service Profile:
+provider "ucs" {
+  ip_address  = "1.2.3.4"
+  username    = "john"
+  password    = "supersecret"
+  log_level    = 6
+  log_filename = "terraform.log"
+}
 
-  * **name** the name of the Service Profile.
-  * **target_org** the target organization of the Service Profile.
-  * **service_profile_template** the Service Profile Template of the Service Profile.
 
-    Example:
 
-    ```
-    resource "ucs_service_profile" "master-server" {
-      name                     = "master-server"
-      target_org               = "some-target-org"
-      service_profile_template = "some-template"
-      metadata { # This field is pretty much free style. Values must always be strings.
-        role             = "master" # This is useful when creating a Mantl cluster
-        ansible_ssh_user = "root"
-        foo              = "bar"
-      }
-    }
-    ```
 
-## How to compile and install
 
-The only development dependency are:
+- Service Profile:
 
-  * [Git] (obviously)
-  * [Go]
-  * [Terraform]
+    - name the name of the Service Profile.
+    - target_org the target organization of the Service Profile.
 
-If you are not familiar with the folder structure for Go projects, check out
-[this](http://golang.org/doc/code.html#Organization) document.
+    - service_profile_template the Service Profile Template of the Service Profile.
 
-There is a Makefile with several tasks to ease the development process.
-When you are starting out with this project, use the task `make bootstrap` to
-get the required dependencies as well as the required Terraform's configuration file.
+    - Example:
+resource "ucs_service_profile" "master-server" {
+  name                     = “terraserver1"
+  target_org               = “root-org"
+  service_profile_template = “terraformprofiletemplate"
+  metadata { # This field is pretty much free style. Values must always be strings.
+    role             = "master" # This is useful when creating a Mantl cluster
+    ansible_ssh_user = "root"
+    foo              = "bar"
+  }
+}
 
-The default make task will `test` the project, `clean` any distribution file and
-`build` the project.
+Make sure you have a pre-defined Service Profile Template available in UCSM for which you align the config.tf with: -
 
-## Known Issues
-  * Mounting the ISO image inside the Docker's HTTP Server image
-    will fail if Docker is using anything different than `devicemapper`
-    as the storage driver.
 
-[Terraform]: https://www.terraform.io/
-[Docker]: https://www.docker.com/
-[Vagrant]: https://www.vagrantup.com/
-[Go]: https://www.golang.org/
-[Git]: https://git-scm.com/
+Once customised, run the following commands in the order given below: -
+
+terraform get
+
+terraform plan
+
+terraform apply
+
+BTW, Terraform will default to the files in the directory from which it is run with .ft extensions
+
+After the terraform plan you should see the something like following output: -
+
+
+After the terraform apply you should see the something like following output: -
+
+After terraform apply is run you will find 2 additional files in the /Users/yourlocalusernamehere/go/bin directory. You should you the xxxx.log file as the primary point of troubleshooting.
+
+
+If you wish to delete the resources in UCSM you have just created you can run: -
+
+terraform destroy
+
+Additional Info for troubleshooting
+
+
+
+
+
+Error Messages in Setup
+
+The following error is when the “ucs-terraform-provider, provider file has not been compiled or made available to the terraform binary in /Users/yourlocalusernamehere/go/bin .
+
+Error configuring: 1 error(s) occurred:
+
+* unknown provider "ucs"
+
+The following error means the directory structure is not setup correclty: -
+
+terraform-provider-ucs-master micdoher$ go build -o terraform-provider-ucs
+resource_ucs_service_profile.go:8:2: cannot find package "github.com/CiscoCloud/terraform-provider-ucs/ipman" in any of:
+    /usr/local/go/src/github.com/CiscoCloud/terraform-provider-ucs/ipman (from $GOROOT)
+    /Users/yourname/terraform/terraform-provider-ucs-master/src/github.com/CiscoCloud/terraform-provider-ucs/ipman (from $GOPATH)
+provider.go:4:2: cannot find package "github.com/CiscoCloud/terraform-provider-ucs/ucsclient" in any of:
+    /usr/local/go/src/github.com/CiscoCloud/terraform-provider-ucs/ucsclient (from $GOROOT)
+    /Users/yourname/terraform/terraform-provider-ucs-master/src/github.com/CiscoCloud/terraform-provider-ucs/ucsclient (from $GOPATH)
+
+If you get the following error when running this from a Mac "xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun"
+
+Try this…….
+
+Open Terminal, and run the following:
+
+xcode-select --install
+
+This will download and install xcode developer tools and fix the problem. The problem is that one needs to explicitly agree to the license agreement.
+
