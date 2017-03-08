@@ -31,6 +31,7 @@ If you are not familiar with the folder structure for Go projects, check out thi
 For Git information https://github.com/
 
 
+
 GIT
 Make sure GIT is setup and working locally as this will be used during the setup process to clone files in different points in this setup process.
 
@@ -72,6 +73,7 @@ export  PATH=$PATH:/Users/yourlocalusernamehere/go
 
 
 
+
 Clone the Git binaries
 
 Clone the terraform-provider-ucs into /Users/yourlocalusernamehere/go/src/github.com/micdoher/ via the following command: -
@@ -81,6 +83,7 @@ git clone https://github.com/micdoher/terraform-provider-ucs.git
 Clone the “go-utils” into /Users/yourlocalusernamehere/go/src/github.com/micdoher with the following command: -
 
 git clone https://github.com/micdoher/GoUtils.git
+
 
 
 
