@@ -2,7 +2,7 @@
 
 ## Overview of solution
 
-The major goal of this project is to be able to Create, Read, Update & Destroy different kind of resources in UCS, from Service Profiles to Boot Policies, Network Policies, Service Profile Templates, etc. For such purpose we have made a Terraform provider. Visit [Terraform's official website](https://terraform.io) for more information on what exactly terraform it and how it works.
+The major goal of this project is to be able to Create, Read, Update & Destroy different kind of resources in UCS, from Service Profiles to Boot Policies, Network Policies, Service Profile Templates, etc. For such purpose we have made a Terraform provider. Visit [Terraform's official website](https://terraform.io) for more information on what exactly terraform is and how it works.
 
 On a feature level, this will allow the user to:
 
@@ -11,7 +11,7 @@ On a feature level, this will allow the user to:
 
 Given a configuration file whose purpose is to create a new Service Profile in UCS, the way it all works is the ```terraform-provider-ucs``` talks to UCS, requesting to create a new Service Profile
 
-This terraform provider will be enhance and iterated upon when we understand further requirement from the DevNet community. One of the first suggested additions is using [Cobbler](http://cobbler.github.io/) to add the Operating System into the new created UCS Server so please provider feedback if you feel this is interesting to you.
+This terraform provider will be enhanced and iterated upon when we understand further requirement from the DevNet community. One of the first suggested additions is using [Cobbler](http://cobbler.github.io/) to add the Operating System into the new created UCS Server so please provider feedback if you feel this is interesting to you.
 
 ## How the Provider setup process works
 
