@@ -1,14 +1,12 @@
 package ucsclient
 
 import (
-	"./fixtures"
 	"bytes"
 	"errors"
 	"io"
 	"io/ioutil"
 	"net"
 	"net/http"
-	//	"strings"
 	"testing"
 
 	utils "github.com/ContainerSolutions/go-utils"
@@ -278,7 +276,9 @@ func TestIsLoggedIn(t *testing.T) {
 
 func TestCreateServiceProfile(t *testing.T) {
 	pex := []byte(`<lsInstantiateNNamedTemplate cookie="chipsahoy!" dn="org-root/ls-test-template" inTargetOrg="org-root" inHierarchical="false" inErrorOnExisting="true"><inNameSet><dn value="deathstar"></dn></inNameSet></lsInstantiateNNamedTemplate>`)
-	body, err := fixtures.ServiceProfileXML()
+	body, err := ioutil.ReadFile("testdata/service-profile.xml")
+	utils.FailOnError(t, err)
+
 	if err != nil {
 		t.Fatalf("could not fetch ServiceProfileXML fixture:\n%s", err)
 	}

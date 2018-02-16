@@ -24,7 +24,7 @@ func resetInventory(t *testing.T, inventoryFile string, inventory []byte) {
 
 func TestGenerateIPFromCIDR(t *testing.T) {
 	inventory := make([]byte, 0)
-	inventoryFile := "./fixtures/dummy-inventory.txt"
+	inventoryFile := "testdata/dummy-inventory.txt"
 	resetInventory(t, inventoryFile, inventory)
 
 	cidr := "10.0.1.0/24"
@@ -59,7 +59,7 @@ func TestGenerateIPFromCIDR(t *testing.T) {
 func TestGenerateIPFromInventoryFile(t *testing.T) {
 	expected := "10.0.0.2"
 	inventory := []byte("10.0.0.1" + "\n")
-	inventoryFile := "./fixtures/dummy-inventory.txt"
+	inventoryFile := "testdata/dummy-inventory.txt"
 	resetInventory(t, inventoryFile, inventory)
 
 	ip, err := GenerateIP(inventoryFile, "127.0.0.1/32")
@@ -107,7 +107,7 @@ func TestNextIP(t *testing.T) {
 
 func TestInventory(t *testing.T) {
 	inventory := []byte("10.0.0.1\n")
-	inventoryFile := "./fixtures/dummy-inventory.txt"
+	inventoryFile := "testdata/dummy-inventory.txt"
 	resetInventory(t, inventoryFile, inventory)
 
 	actual, err := Inventory(inventoryFile)
@@ -140,7 +140,7 @@ func TestInventoryNonExistingFile(t *testing.T) {
 
 func TestSaveIPBlankInventory(t *testing.T) {
 	inventory := []byte("")
-	inventoryFile := "./fixtures/dummy-inventory.txt"
+	inventoryFile := "testdata/dummy-inventory.txt"
 	resetInventory(t, inventoryFile, inventory)
 
 	expected := "1.2.3.4\n"
@@ -158,7 +158,7 @@ func TestSaveIPBlankInventory(t *testing.T) {
 
 func TestSaveIPExistingInventory(t *testing.T) {
 	inventory := []byte("1.2.3.4\n")
-	inventoryFile := "./fixtures/dummy-inventory.txt"
+	inventoryFile := "testdata/dummy-inventory.txt"
 	resetInventory(t, inventoryFile, inventory)
 
 	expected := "1.2.3.4\n4.3.2.1\n"
