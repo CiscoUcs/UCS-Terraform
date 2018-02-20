@@ -2,6 +2,7 @@ package ucsinternal
 
 import (
 	"bytes"
+	"io/ioutil"
 	"testing"
 
 	"github.com/ContainerSolutions/go-utils"
@@ -86,7 +87,7 @@ func TestMarshalDestroyRequest(t *testing.T) {
 }
 
 func TestNewServiceProfileResponse(t *testing.T) {
-	data, err := utils.Fixture("service-profile.xml")
+	data, err := ioutil.ReadFile("testdata/service-profile.xml")
 	utils.FailOnError(t, err)
 
 	res, err := NewServiceProfileResponse(data)
