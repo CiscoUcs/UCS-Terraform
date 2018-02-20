@@ -50,6 +50,7 @@ Use the default setting during the install process for GOlang
 #### Create the required directory structure
 
 ```
+mkdir -p ~/Users/yourlocalusernamehere/go/src/github.com/CiscoUcs
 mkdir -p ~/Users/yourlocalusernamehere/go/src/github.com/micdoher
 ```
 
@@ -67,20 +68,20 @@ export  PATH=$PATH:/Users/yourlocalusernamehere/go
 
 ### Clone the Git binaries
 
-Clone the terraform-provider-ucs into ```/Users/yourlocalusernamehere/go/src/github.com/micdoher/``` via the following command: -
+Clone the UCS-Terraform provider repo into ```/Users/yourlocalusernamehere/go/src/github.com/CiscoUcs/``` via the following command: -
 
+
+```
+cd ~/Users/yourlocalusernamehere/go/src/github.com/CiscoUcs/
+git clone https://github.com/CiscoUcs/UCS-Terraform.git
+```
+
+Clone the “go-utils” repo into ```/Users/yourlocalusernamehere/go/src/github.com/micdoher``` with the following command: -
 
 ```
 cd ~/Users/yourlocalusernamehere/go/src/github.com/micdoher/
-git clone https://github.com/micdoher/terraform-provider-ucs.git
-```
-
-Clone the “go-utils” into ```/Users/yourlocalusernamehere/go/src/github.com/micdoher``` with the following command: -
-
-```
 git clone https://github.com/micdoher/GoUtils.git
 ```
-
 
 ### Compiling and dependency setup
 
@@ -91,7 +92,7 @@ After the terraform provider has been cloned, the resulting directory structure 
 
 Now navigate to:
 ```
-cd /Users/yourlocalusernamehere/go/src/github.com/CiscoCloud/terraform-provider-ucs
+cd /Users/yourlocalusernamehere/go/src/github.com/CiscoUcs/UCS-Terraform
 ```
 
 
@@ -215,13 +216,13 @@ Error configuring: 1 error(s) occurred:
 The following error means the directory structure is not setup correclty: 
 
 ```
-terraform-provider-ucs-master micdoher$ go build -o terraform-provider-ucs
-resource_ucs_service_profile.go:8:2: cannot find package "github.com/CiscoCloud/terraform-provider-ucs/ipman" in any of:
-    /usr/local/go/src/github.com/CiscoCloud/terraform-provider-ucs/ipman (from $GOROOT)
-    /Users/yourname/terraform/terraform-provider-ucs-master/src/github.com/CiscoCloud/terraform-provider-ucs/ipman (from $GOPATH)
-provider.go:4:2: cannot find package "github.com/CiscoCloud/terraform-provider-ucs/ucsclient" in any of:
-    /usr/local/go/src/github.com/CiscoCloud/terraform-provider-ucs/ucsclient (from $GOROOT)
-    /Users/yourname/terraform/terraform-provider-ucs-master/src/github.com/CiscoCloud/terraform-provider-ucs/ucsclient (from $GOPATH)
+terraform-provider-ucs-master UCS-Terraform$ go build -o terraform-provider-ucs
+resource_ucs_service_profile.go:8:2: cannot find package "github.com/CiscoUcs/UCS-Terraform/ipman" in any of:
+    /usr/local/go/src/github.com/CiscoUcs/UCS-Terraform/ipman (from $GOROOT)
+    /Users/yourname/terraform/terraform-provider-ucs-master/src/github.com/CiscoUcs/UCS-Terraform/ipman (from $GOPATH)
+provider.go:4:2: cannot find package "github.com/CiscoUcs/UCS-Terraform/ucsclient" in any of:
+    /usr/local/go/src/github.com/CiscoUcs/UCS-Terraform/ucsclient (from $GOROOT)
+    /Users/yourname/terraform/terraform-provider-ucs-master/src/github.com/CiscoUcs/UCS-Terraform/ucsclient (from $GOPATH)
 ```
 
 If you get the following error when running this from a Mac ```xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun```
