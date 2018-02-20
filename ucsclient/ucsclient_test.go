@@ -361,10 +361,10 @@ func TestLogout(t *testing.T) {
 }
 
 func TestConfigResolveDN(t *testing.T) {
-	req, err := utils.Fixture("config-resolve-dn-req.xml")
+	req, err := ioutil.ReadFile("testdata/config-resolve-dn-req.xml")
 	utils.FailOnError(t, err)
 
-	res, err := utils.Fixture("config-resolve-dn-res.xml")
+	res, err := ioutil.ReadFile("testdata/config-resolve-dn-res.xml")
 	utils.FailOnError(t, err)
 
 	dn := "org-root/ls-foobar"
